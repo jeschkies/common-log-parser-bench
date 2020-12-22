@@ -1,0 +1,15 @@
+[package]
+name = "loki-bench"
+version = "0.1.0"
+authors = ["Karsten Jeschkies <k@jeschkies.xyz>"]
+edition = "2018"
+
+[dependencies]
+nom = "6.0.1"
+
+[dev-dependencies]
+criterion = "0.3"
+
+[[bench]]
+name = "my_benchmark"
+harness = false
