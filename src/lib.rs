@@ -1,9 +1,15 @@
-pub mod nom;
+#[macro_use] extern crate lazy_static;
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
+pub mod nom;
+pub mod regex;
+
+#[allow(dead_code)]
+pub struct Labels<'t> {
+    ip: &'t str,
+    user: &'t str,
+    frank: &'t str,
+    date_time: &'t str,
+    request: &'t str,
+    response_code: u16,
+    size: u32,
 }

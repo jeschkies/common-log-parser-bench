@@ -1,58 +1,40 @@
-extern crate nom;
+use super::Labels;
 
 use nom::{
-    bytes::streaming::{take, take_till, take_while1},
-    character::streaming::{char, digit1, space1},
-    combinator::{map, map_res, recognize},
+    bytes::streaming::{take, take_while, take_while1},
+    character::streaming::{char, digit1, newline, space1},
+    combinator::{map_res, recognize},
     sequence::{preceded, terminated, tuple},
-    IResult,
+    AsChar, IResult,
 };
 
-pub struct Labels {
-    ip: String,
-    user: String,
-    frank: String,
-    date_time: String,
-    request: String,
-    response_code: u16,
-    size: u32,
+fn surrounded<'t>(begin: char, end: char) -> impl FnMut(&'t str) -> IResult<&'t str, &'t str> {
+    preceded(
+        char(begin),
+        terminated(take_while(move |c| c != end), char(end)),
+    )
 }
 
-fn is_digit(c: char) -> bool {
-    match c {
-        '0'..='9' => true,
-        _ => false,
-    }
+fn ip(i: &str) -> IResult<&str, &str> {
+    // Parse ipv4 or ipv6
+    take_while1(|c: char| c.is_hex_digit() || c == '.' || c == ':')(i)
 }
 
-fn ip(i: &str) -> IResult<&str, String> {
-    map(take_while1(|c| is_digit(c) || c == '.'), |s: &str| {
-        s.to_string()
-    })(i)
-}
-
-fn user(i: &str) -> IResult<&str, String> {
+fn user(i: &str) -> IResult<&str, &str> {
     // TODO: support other user identifiers
-    map(char('-'), |c| c.to_string())(i)
+    recognize(char('-'))(i)
 }
 
-fn frank(i: &str) -> IResult<&str, String> {
-    // TODO: support other user identifiers
-    map(char('-'), |c| c.to_string())(i)
+fn frank(i: &str) -> IResult<&str, &str> {
+    recognize(take_while1(|c| c != ' '))(i)
 }
 
-fn date_time(i: &str) -> IResult<&str, String> {
-    map(
-        preceded(char('['), terminated(take_till(|c| c == ']'), char(']'))),
-        |s: &str| s.to_string(),
-    )(i)
+fn date_time(i: &str) -> IResult<&str, &str> {
+    surrounded('[', ']')(i)
 }
 
-fn request(i: &str) -> IResult<&str, String> {
-    map(
-        preceded(char('"'), terminated(take_till(|c| c == '"'), char('"'))),
-        |s: &str| s.to_string(),
-    )(i)
+fn request(i: &str) -> IResult<&str, &str> {
+    surrounded('"', '"')(i)
 }
 
 fn response_code(i: &str) -> IResult<&str, u16> {
@@ -64,7 +46,7 @@ fn size(i: &str) -> IResult<&str, u32> {
 }
 
 pub fn parse(i: &str) -> IResult<&str, Labels> {
-    let (input, (ip, _, user, _, frank, _, date_time, _, request, _, response_code, _, size)) =
+    let (input, (ip, _, user, _, frank, _, date_time, _, request, _, response_code, _, size, _)) =
         tuple((
             ip,
             space1,
@@ -79,6 +61,7 @@ pub fn parse(i: &str) -> IResult<&str, Labels> {
             response_code,
             space1,
             size,
+            terminated(take_while(|c: char| c != '\n'), newline),
         ))(i)?;
 
     Ok((
@@ -95,14 +78,66 @@ pub fn parse(i: &str) -> IResult<&str, Labels> {
     ))
 }
 
+#[derive(Clone, Copy)]
+pub struct CommonLogParser<'t> {
+    pub input: &'t str,
+}
+
+impl<'t> Iterator for CommonLogParser<'t> {
+    type Item = Labels<'t>;
+
+    fn next(&mut self) -> Option<Labels<'t>> {
+        if let Ok((out, labels)) = parse(self.input) {
+            self.input = out;
+            Some(labels)
+        } else {
+            None
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn test_all() {
-        let input = r#"54.36.148.15 - - [19/Dec/2020:02:04:07 +0000] "GET /a/563915221/alternative-to-miami-radio-live.html HTTP/1.1" 200 10531\n"#;
+    fn test_ipv6() {
+        let input = r#"2600:1700:2825:0:3848:6646:77d4:a280 - - [19/Dec/2020:02:05:35 +0000] "GET / HTTP/1.1" 200 11491
+        "#;
         let (_, labels) = parse(input).expect("should parse correctly");
-        assert_eq!(labels.ip, "54.36.148.15")
+        assert_eq!(labels.ip, "2600:1700:2825:0:3848:6646:77d4:a280")
+    }
+
+    #[test]
+    fn test_frank() {
+        let input = r#"18.141.77.170 - aJVUFc7x [19/Dec/2020:11:13:24 +0000] "GET /manager/html/ HTTP/1.1" 500 8754
+        "#;
+        let (_, labels) = parse(input).expect("should parse correctly");
+        assert_eq!(labels.frank, "aJVUFc7x")
+    }
+
+    #[test]
+    fn test_all() {
+        let input = r#"54.36.148.15 - - [19/Dec/2020:02:04:07 +0000] "GET /a/563915221/alternative-to-miami-radio-live.html HTTP/1.1" 200 10531
+        "#;
+        let (_, labels) = parse(input).expect("should parse correctly");
+        assert_eq!(labels.ip, "54.36.148.15");
+        assert_eq!(labels.user, "-");
+        assert_eq!(labels.frank, "-");
+        assert_eq!(labels.date_time, "19/Dec/2020:02:04:07 +0000");
+        assert_eq!(labels.request, "GET /a/563915221/alternative-to-miami-radio-live.html HTTP/1.1");
+        assert_eq!(labels.response_code, 200);
+        assert_eq!(labels.size, 10531);
+    }
+
+    #[test]
+    fn test_iter() {
+        let input = r#"171.247.180.164 - - [19/Dec/2020:02:04:07 +0000] "GET /a/995540551/alternative-to-king365-choi-game-danh-bai-online.html HTTP/1.1" 200 10994
+54.36.148.15 - - [19/Dec/2020:02:04:07 +0000] "GET /a/563915221/alternative-to-miami-radio-live.html HTTP/1.1" 200 10531
+45.77.209.201 - - [19/Dec/2020:02:04:09 +0000] broken 
+"#;
+        let p = CommonLogParser { input };
+
+        assert_eq!(p.count(), 2)
     }
 }
