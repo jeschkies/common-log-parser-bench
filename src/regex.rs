@@ -1,18 +1,6 @@
 use super::Labels;
 
 use regex::{CaptureMatches, Regex};
-// TODO: use refs
-/*
-pub struct Labels {
-    ip: String,
-    user: String,
-    frank: String,
-    date_time: String,
-    request: String,
-    response_code: u16,
-    size: u32,
-}
-*/
 
 lazy_static! {
     static ref RE: Regex = Regex::new(r#"([\da-f\.:]*) (.*) (.*) \[(.*)\] "(.*)" (\d{3}) (\d*).*\n"#).unwrap();
