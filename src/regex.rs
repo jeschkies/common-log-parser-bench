@@ -1,6 +1,8 @@
+use super::Labels;
 
 use regex::{CaptureMatches, Regex};
 // TODO: use refs
+/*
 pub struct Labels {
     ip: String,
     user: String,
@@ -10,13 +12,14 @@ pub struct Labels {
     response_code: u16,
     size: u32,
 }
+*/
 
 lazy_static! {
     static ref RE: Regex = Regex::new(r#"([\da-f\.:]*) (.*) (.*) \[(.*)\] "(.*)" (\d{3}) (\d*).*\n"#).unwrap();
 }
 
 pub struct CommonLogParser<'t> {
-    captures: CaptureMatches<'t, 't>,
+    captures: CaptureMatches<'static, 't>,
 }
 
 impl<'t> CommonLogParser<'t> {
@@ -28,17 +31,17 @@ impl<'t> CommonLogParser<'t> {
 }
 
 impl<'t> Iterator for CommonLogParser<'t> {
-    type Item = Labels;
+    type Item = Labels<'t>;
 
-    fn next(&mut self) -> Option<Labels> {
+    fn next(&mut self) -> Option<Self::Item> {
 
         if let Some(cap) = self.captures.next() {
             Some(Labels {
-                ip: String::from(&cap[1]),
-                user: String::from(&cap[2]),
-                frank: String::from(&cap[3]),
-                date_time: String::from(&cap[4]),
-                request: String::from(&cap[5]),
+                ip: cap.get(1).unwrap().as_str(),
+                user: cap.get(2).unwrap().as_str(),
+                frank: cap.get(3).unwrap().as_str(),
+                date_time: cap.get(4).unwrap().as_str(),
+                request: cap.get(5).unwrap().as_str(),
                 response_code: cap[6].parse::<u16>().unwrap(),
                 size: cap[7].parse::<u32>().unwrap(),
             })
