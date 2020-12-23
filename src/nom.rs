@@ -1,21 +1,12 @@
+use super::Labels;
+
 use nom::{
-    branch::alt,
     bytes::streaming::{take, take_while, take_while1},
     character::streaming::{char, digit1, newline, space1},
     combinator::{map_res, recognize},
     sequence::{preceded, terminated, tuple},
     AsChar, IResult,
 };
-
-pub struct Labels<'t> {
-    ip: &'t str,
-    user: &'t str,
-    frank: &'t str,
-    date_time: &'t str,
-    request: &'t str,
-    response_code: u16,
-    size: u32,
-}
 
 fn is_digit(c: char) -> bool {
     match c {

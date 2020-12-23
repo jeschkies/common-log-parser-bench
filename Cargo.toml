@@ -5,7 +5,9 @@ authors = ["Karsten Jeschkies <k@jeschkies.xyz>"]
 edition = "2018"
 
 [dependencies]
+lazy_static = "1.4.0"
 nom = "6.0.1"
+regex = "1.4.2"
 
 [dev-dependencies]
 criterion = "0.3"
