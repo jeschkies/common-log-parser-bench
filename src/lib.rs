@@ -2,6 +2,8 @@
 
 pub mod nom;
 pub mod regex;
+
+#[allow(dead_code)]
 pub struct Labels<'t> {
     ip: &'t str,
     user: &'t str,

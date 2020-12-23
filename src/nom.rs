@@ -8,13 +8,6 @@ use nom::{
     AsChar, IResult,
 };
 
-fn is_digit(c: char) -> bool {
-    match c {
-        '0'..='9' => true,
-        _ => false,
-    }
-}
-
 fn surrounded<'t>(begin: char, end: char) -> impl FnMut(&'t str) -> IResult<&'t str, &'t str> {
     preceded(
         char(begin),
@@ -128,7 +121,13 @@ mod tests {
         let input = r#"54.36.148.15 - - [19/Dec/2020:02:04:07 +0000] "GET /a/563915221/alternative-to-miami-radio-live.html HTTP/1.1" 200 10531
         "#;
         let (_, labels) = parse(input).expect("should parse correctly");
-        assert_eq!(labels.ip, "54.36.148.15")
+        assert_eq!(labels.ip, "54.36.148.15");
+        assert_eq!(labels.user, "-");
+        assert_eq!(labels.frank, "-");
+        assert_eq!(labels.date_time, "19/Dec/2020:02:04:07 +0000");
+        assert_eq!(labels.request, "GET /a/563915221/alternative-to-miami-radio-live.html HTTP/1.1");
+        assert_eq!(labels.response_code, 200);
+        assert_eq!(labels.size, 10531);
     }
 
     #[test]
