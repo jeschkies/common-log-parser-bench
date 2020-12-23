@@ -5,9 +5,10 @@ use std::fs;
 
 fn nom_parser(c: &mut Criterion) {
     let data = fs::read_to_string("data/small_access.log").unwrap();
+    let p = loki_bench::nom::CommonLogParser { input: &data };
     c.bench_function("nom", move |b| {
         // TODO: parse more than first line.
-        b.iter(|| loki_bench::nom::parse(&data).unwrap());
+        b.iter(|| assert_eq!(p.count(), 161761));
     });
 }
 
