@@ -28,3 +28,12 @@ A quick run shows that the nom parser is faster than `rg` and regex. The regex p
 ```
 
 These quick runs are confirmed by longer `cargo bench` runs. The results might be surprising. According to a [Stackoverflow answer](https://stackoverflow.com/questions/48777856/regexcaptures-iter-on-an-xml-file-is-slower-than-expected) by @BurntSushi, the `rg` author, `regex` is not optimized for matches yet.
+
+## Comparison to Golang
+
+The Golang regular expression engine is faster than the `regex` crate but slower than `rg`.
+
+```
+› /usr/bin/time go run regex.go 
+7.66user 0.09system 0:07.65elapsed 101%CPU
+```
