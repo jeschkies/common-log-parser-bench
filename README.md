@@ -27,7 +27,7 @@ A quick run shows that the nom parser is faster than `rg` and regex. The regex p
 9.05user 0.01system 0:09.08elapsed 99%CPU
 ```
 
-These quick runs are confirmed by longer `cargo bench` runs. The results might be surprising. According to a [Stackoverflow answer](https://stackoverflow.com/questions/48777856/regexcaptures-iter-on-an-xml-file-is-slower-than-expected) by @BurntSushi, the `rg` author, `regex` is not optimized for matches yet.
+These quick runs are confirmed by longer `cargo bench` runs. The results might be surprising. According to a [Stackoverflow answer](https://stackoverflow.com/questions/48777856/regexcaptures-iter-on-an-xml-file-is-slower-than-expected) by @BurntSushi, the `rg` author, and [rust-lang/regex#389](https://github.com/rust-lang/regex/issues/389) `regex` is not optimized for capturing matches yet.
 
 ## Comparison to Golang
 
