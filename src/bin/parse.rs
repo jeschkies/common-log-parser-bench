@@ -1,3 +1,4 @@
+use loki_bench;
 use std::env;
 use std::fs;
 
