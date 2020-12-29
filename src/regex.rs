@@ -3,7 +3,7 @@ use super::Labels;
 use regex::{CaptureMatches, Regex};
 
 lazy_static! {
-    static ref RE: Regex = Regex::new(r#"([\da-f\.:]*) (.*) (.*) \[(.*)\] "(.*)" (\d{3}) (\d*).*\n"#).unwrap();
+    static ref RE: Regex = Regex::new(r#"([0-9a-f\.:]+) ([\S\-]+) ([\S\-]+) \[([^\]]+)\] "(.*)" ([0-9]{3}) ([0-9]*).*\n"#).unwrap();
 }
 
 pub struct CommonLogParser<'t> {

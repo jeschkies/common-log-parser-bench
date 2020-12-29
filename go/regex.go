@@ -8,7 +8,7 @@ import (
 	
 
 func main() {
-    re := regexp.MustCompile(`([\da-f\.:]*) (.*) (.*) \[(.*)\] "(.*)" (\d{3}) (\d*).*\n`)
+    re := regexp.MustCompile(`([0-9a-f\.:]+) ([\S\-]+) ([\S\-]+) \[([^\]]+)\] "(.*)" ([0-9]{3}) ([0-9]*).*\n`)
 
     b, err := ioutil.ReadFile("data/small_access.log")
     if err != nil {
