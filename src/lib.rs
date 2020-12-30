@@ -16,7 +16,11 @@ pub struct Labels<'t> {
 
 #[no_mangle]
 pub extern "C" fn run_nom() {
-    let data = std::fs::read_to_string("data/small_access.log").unwrap();
-    let p = nom::CommonLogParser { input: &data };
-    assert_eq!(p.count(), 161761);
+    match std::fs::read_to_string("data/small_access.log") {
+        Ok(data) => {
+            let p = nom::CommonLogParser { input: &data };
+            assert_eq!(p.count(), 161761);
+        },
+        Err(e) => eprintln!("{}", e)
+    }
 }

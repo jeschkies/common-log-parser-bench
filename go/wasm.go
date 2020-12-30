@@ -20,7 +20,12 @@ func main() {
 
 	wasiConfig := wasmtime.NewWasiConfig()
 	wasiConfig.InheritEnv()
-	wasiConfig.PreopenDir(".", ".")
+	wasiConfig.InheritStderr()
+	wasiConfig.InheritStdout()
+	err = wasiConfig.PreopenDir(".", ".")
+	check(err)
+	err = wasiConfig.PreopenDir("./data", "./data")
+	check(err)
 	wasi, err := wasmtime.NewWasiInstance(store, wasiConfig, "wasi_snapshot_preview1")
 	check(err)
 
