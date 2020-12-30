@@ -21,7 +21,7 @@ func main() {
 	wasiConfig := wasmtime.NewWasiConfig()
 	wasiConfig.InheritEnv()
 	wasiConfig.PreopenDir(".", ".")
-	wasi, err := wasmtime.NewWasiInstance(store, wasiConfig, "wasi_unstable")
+	wasi, err := wasmtime.NewWasiInstance(store, wasiConfig, "wasi_snapshot_preview1")
 	check(err)
 
 	err = linker.DefineWasi(wasi)
