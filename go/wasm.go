@@ -11,7 +11,7 @@ func main() {
 
 	linker := wasmtime.NewLinker(store)
 
-	module, err := wasmtime.NewModuleFromFile(engine, "../target/wasm32-wasi/release/loki_bench.wasm")
+	module, err := wasmtime.NewModuleFromFile(engine, "../target/wasm32-wasi/release/parse.wasm")
 	check(err)
 
 	for _, v := range module.Imports() {
@@ -22,7 +22,7 @@ func main() {
 	wasiConfig.InheritEnv()
 	wasiConfig.InheritStderr()
 	wasiConfig.InheritStdout()
-	err = wasiConfig.PreopenDir("./data", "/data")
+	err = wasiConfig.PreopenDir(".", ".")
 	check(err)
 	wasi, err := wasmtime.NewWasiInstance(store, wasiConfig, "wasi_snapshot_preview1")
 	check(err)
@@ -33,7 +33,7 @@ func main() {
 	instance, err := linker.Instantiate(module)
 	check(err)
 
-	nom := instance.GetExport("run_nom").Func()
+	nom := instance.GetExport("_start").Func()
 	_, err = nom.Call()
 	check(err)
 }
