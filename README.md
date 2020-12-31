@@ -9,7 +9,7 @@ We use [ripgrep](https://github.com/BurntSushi/ripgrep) as a baseline.
 3.68user 0.00system 0:03.70elapsed 99%CPU
 ```
 
-`data/small_access.log` is a 35M file containing 161761 Nginx access lines. Both parsers convert the response code and the response size to an integer.
+`data/small_access.log` is a 35M file containing 161761 Nginx access lines. Both parsers convert the response code and the response size to an integer. Extract the logs with `tar -xzvf data.tar.gz`.
 
 One can run the benchmark with `cargo bench` but be aware that the regex parser takes a long time.
 
