@@ -13,3 +13,14 @@ pub struct Labels<'t> {
     response_code: u16,
     size: u32,
 }
+
+#[no_mangle]
+pub extern "C" fn run_nom() {
+    match std::fs::read_to_string("data/small_access.log") {
+        Ok(data) => {
+            let p = nom::CommonLogParser { input: &data };
+            assert_eq!(p.count(), 161761);
+        },
+        Err(e) => eprintln!("{}", e)
+    }
+}

@@ -9,7 +9,7 @@ We use [ripgrep](https://github.com/BurntSushi/ripgrep) as a baseline.
 3.68user 0.00system 0:03.70elapsed 99%CPU
 ```
 
-`data/small_access.log` is a 35M file containing 161761 Nginx access lines. Both parsers convert the response code and the response size to an integer.
+`data/small_access.log` is a 35M file containing 161761 Nginx access lines. Both parsers convert the response code and the response size to an integer. Extract the logs with `tar -xzvf data.tar.gz`.
 
 One can run the benchmark with `cargo bench` but be aware that the regex parser takes a long time.
 
@@ -28,3 +28,12 @@ A quick run shows that the nom parser is faster than `rg` and regex. The regex p
 ```
 
 These quick runs are confirmed by longer `cargo bench` runs. The results might be surprising. There is some discussion on the regular expression used here in [rust-lang/regex#389](https://github.com/rust-lang/regex/issues/389).
+
+## Comparison to Golang
+
+The Golang regular expression engine is faster than the `regex` crate but slower than `rg`.
+
+```
+› /usr/bin/time go run regex.go 
+7.66user 0.09system 0:07.65elapsed 101%CPU
+```
