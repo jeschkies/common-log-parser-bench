@@ -33,6 +33,7 @@ func main() {
 	instance, err := linker.Instantiate(module)
 	check(err)
 
+	// Broken until https://github.com/rust-lang/rust/issues/79199
 	nom := instance.GetExport("_start").Func()
 	_, err = nom.Call()
 	check(err)
