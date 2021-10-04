@@ -37,3 +37,10 @@ The Golang regular expression engine is faster than the `regex` crate but slower
 › /usr/bin/time go run regex.go 
 7.66user 0.09system 0:07.65elapsed 101%CPU
 ```
+
+## Comparison to Rosie (PEG)
+
+```
+› /usr/bin/time rosie grep 'net.ip "-" "-" "["date.day"/"date.month_name"/"date.year":"time.rfc2822 time.rfc2822_zone"]" "\""net.http_command_name net.path net.http_version"\"" [:digit:]+ [:digit:]' data/small_access.log > /dev/null 
+3.70user 0.05system 0:03.76elapsed 99%CPU
+```

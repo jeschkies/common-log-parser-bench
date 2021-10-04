@@ -1,2 +1,5 @@
 github.com/bytecodealliance/wasmtime-go v0.21.0 h1:8C6fNmpfzF6QQ9h0PCvGaYORhtgMvANCumafDPDmBSU=
 github.com/bytecodealliance/wasmtime-go v0.21.0/go.mod h1:q320gUxqyI8yB+ZqRuaJOEnGkAnHh6WtJjMaT2CW4wI=
+github.com/jeschkies/rosie-go v0.0.0-20211004160528-0da515291104 h1:8S4YyJnjE9aJn6Zi+SHY/xhKe7qitFXJnsv8T+P/zX4=
+github.com/jeschkies/rosie-go v0.0.0-20211004160528-0da515291104/go.mod h1:ICVWu1qktbY9e5xJoPGSQqzqSuIP83ifI6LCDoDU0WI=
+gitlab.com/rosie-community/clients/go v0.0.0-20190223194345-18b09df4802b h1:Dma+cDS/QbbfDbDGuRyEAEmuWDOD5H30T0gFSwhhpGg=
