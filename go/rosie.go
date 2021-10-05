@@ -20,7 +20,16 @@ func runLine() error {
 	if err != nil {
 		return err
 	}
-	pat, _, err := engine.Compile(`net.ip "-" "-" "["date.day"/"date.month_name"/"date.year":"time.rfc2822 time.rfc2822_zone"]" "\""net.http_command_name net.path net.http_version"\"" [:digit:]+ [:digit:]`)
+	_, _, _, err = engine.ImportPkg("net")
+	if err != nil {
+		return err
+	}
+	_, _, _, err = engine.ImportPkg("date")
+	if err != nil {
+		return err
+	}
+
+	pat, _, err := engine.Compile("net.ip \"-\" \"-\" \"[\"date.day\"/\"date.month_name\"/\"date.year")
 
 	f, err := os.Open("data/small_access.log")
 	if err != nil {
@@ -36,7 +45,7 @@ func runLine() error {
 		if err != nil {
 			return err
 		}
-		if match != nil {
+		if len(match.Data) > 0 {
 			count++
 		}
 	}
