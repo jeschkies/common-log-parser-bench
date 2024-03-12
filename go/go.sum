@@ -1,5 +1,9 @@
 github.com/bytecodealliance/wasmtime-go v0.21.0 h1:8C6fNmpfzF6QQ9h0PCvGaYORhtgMvANCumafDPDmBSU=
 github.com/bytecodealliance/wasmtime-go v0.21.0/go.mod h1:q320gUxqyI8yB+ZqRuaJOEnGkAnHh6WtJjMaT2CW4wI=
+github.com/glkz/rabinkarp v0.0.0-20150916193616-79fb77d74a0b h1:KSMUPdTKaQD/4NLLt6h6OxfRuo7/LCr7hiCk7Eqs++Q=
+github.com/glkz/rabinkarp v0.0.0-20150916193616-79fb77d74a0b/go.mod h1:DS/NcaXfmDBpEx7V9v0z2YC7OyIR0A7W9XbJD163iCI=
 github.com/jeschkies/rosie-go v0.0.0-20211004160528-0da515291104 h1:8S4YyJnjE9aJn6Zi+SHY/xhKe7qitFXJnsv8T+P/zX4=
 github.com/jeschkies/rosie-go v0.0.0-20211004160528-0da515291104/go.mod h1:ICVWu1qktbY9e5xJoPGSQqzqSuIP83ifI6LCDoDU0WI=
+github.com/petar-dambovaliev/aho-corasick v0.0.0-20210921064803-78570adc83f6 h1:jV0T2n5QsGB0z+9SdGdUUvieADmFSKmKTInRGr0BobI=
+github.com/petar-dambovaliev/aho-corasick v0.0.0-20210921064803-78570adc83f6/go.mod h1:EHPiTAKtiFmrMldLUNswFwfZ2eJIYBHktdaUTZxYWRw=
 gitlab.com/rosie-community/clients/go v0.0.0-20190223194345-18b09df4802b h1:Dma+cDS/QbbfDbDGuRyEAEmuWDOD5H30T0gFSwhhpGg=
